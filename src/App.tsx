@@ -2,41 +2,45 @@
 import { useEffect } from 'react';
 import './App.scss'
 
+function handleError(error:Error) {
+    console.log(error.message);
+}
+
 async function fetchPokemonData(link:string) {
     try {
         const response = await fetch(link, {mode: 'cors'});
-        if (!response.ok) throw new ReferenceError('Data Undefined');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status}`);
+        }
 
         const pokemonData = await response.json();
         return pokemonData;
 
-    } catch (error) {
+    } catch(error) {
         if (error instanceof Error) {
-            throw error.message;
+            handleError(error);
         }
-    } 
+    }
 }
 
-async function getData() {
-    const link = 'https://pokeapi.co/api/v2/pokemon/600/';
-
-    await fetchPokemonData(link)
-    .then((data) => console.log(data))
-    .catch((error) => console.log(error))
-}
-
-function App() {
-    const pokemonIds:number[] = [];
+function generateRandomIds() {
+    const randomIds:number[] = [];
 
     for (let i=0; i < 12; i++) {
         const randomNum = Math.floor(Math.random() * 600);
-        pokemonIds.push(randomNum);
+        randomIds.push(randomNum);
     }
 
-    console.log(pokemonIds);
+    return randomIds;
+}
+
+function App() {
+    console.log(generateRandomIds());
+
+    const link = 'https://pokeapi.co/api/v2/pokemon/599/';
 
     useEffect(() => {
-        getData();
+        fetchPokemonData(link);
     }, []);
 
     return (
