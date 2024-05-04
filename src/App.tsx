@@ -2,10 +2,6 @@
 import { useEffect } from 'react';
 import './App.scss'
 
-function handleError(error:Error) {
-    console.log(error.message);
-}
-
 async function fetchPokemonData(link:string) {
     try {
         const response = await fetch(link, {mode: 'cors'});
@@ -18,18 +14,25 @@ async function fetchPokemonData(link:string) {
         return pokemonData;
 
     } catch(error) {
-        if (error instanceof Error) {
-            handleError(error);
-        }
+        console.error(error);
+        throw error;
     }
 }
 
 async function getPokemonDataSet(idSet:number[]) {
-    console.log(idSet);
+    let errorOccurred = false;
 
     for(let i=0; i < idSet.length; i++) {
-        const link = `https://pokeapi.co/api/v2/pokemon/${idSet[i]}/`;
-        await fetchPokemonData(link);
+        try {
+            if (errorOccurred) break;
+            const link = `https://pokeapi.co/api/v2/pokemon/${idSet[i]}/`;
+            await fetchPokemonData(link);
+        } catch(error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                errorOccurred = true;
+            }
+        }
     }
 }
 
