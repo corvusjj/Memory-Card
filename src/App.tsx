@@ -14,12 +14,22 @@ async function fetchPokemonData(link:string) {
         }
 
         const pokemonData = await response.json();
+        console.log(pokemonData);
         return pokemonData;
 
     } catch(error) {
         if (error instanceof Error) {
             handleError(error);
         }
+    }
+}
+
+async function getPokemonDataSet(idSet:number[]) {
+    console.log(idSet);
+
+    for(let i=0; i < idSet.length; i++) {
+        const link = `https://pokeapi.co/api/v2/pokemon/${idSet[i]}/`;
+        await fetchPokemonData(link);
     }
 }
 
@@ -35,12 +45,9 @@ function generateRandomIds() {
 }
 
 function App() {
-    console.log(generateRandomIds());
-
-    const link = 'https://pokeapi.co/api/v2/pokemon/599/';
-
     useEffect(() => {
-        fetchPokemonData(link);
+        const idSet = generateRandomIds();
+        getPokemonDataSet(idSet);
     }, []);
 
     return (
