@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// import { useState } from 'react'
+import { useEffect } from 'react';
 import './App.scss'
 
-function App() {
-  const [count, setCount] = useState(0)
+async function fetchPokemonData(link:string) {
+    try {
+        const response = await fetch(link, {mode: 'cors'});
+        if (!response.ok) throw new ReferenceError('Data Undefined');
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+        const pokemonData = await response.json();
+        return pokemonData;
+
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error.message;
+        }
+    } 
+}
+
+async function getData() {
+    const link = 'https://pokeapi.co/api/v2/pokemon/600/';
+
+    await fetchPokemonData(link)
+    .then((data) => console.log(data))
+    .catch((error) => console.log(error))
+}
+
+function App() {
+    const pokemonIds:number[] = [];
+
+    for (let i=0; i < 12; i++) {
+        const randomNum = Math.floor(Math.random() * 600);
+        pokemonIds.push(randomNum);
+    }
+
+    console.log(pokemonIds);
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    return (
+      <>
+        <div>Hello</div>
+      </>
+    )
 }
 
 export default App
