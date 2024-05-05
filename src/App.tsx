@@ -44,6 +44,53 @@ async function getPokemonDataSet(idSet:number[]) {
     return pokemonDataSet;
 }
 
+async function getRawDataSet(dataSet) {
+    const rawDataSet = [];
+    let errorOccurred = false;
+
+    async function getRawData(link:string) {
+        try {
+            const response = await fetch(link);
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            return url;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    try {
+        for(let i=0; i < dataSet.length; i++) {
+            const pokemonData = dataSet[i];
+    
+            try {
+                if (errorOccurred) break;
+    
+                const name = pokemonData.name;
+                const id = pokemonData.id;
+                const cryAudio = await getRawData(pokemonData.cries.legacy);
+                const sprite = await getRawData(pokemonData.sprites.front_default);
+    
+                const pokemonRawData = new Object({name, id, cryAudio, sprite});
+                console.log(pokemonRawData);
+                rawDataSet.push(pokemonRawData);
+            } catch(error) {
+                if (error instanceof Error) {
+                    errorOccurred = true;
+                    throw error;
+                }
+            }
+        }
+
+        return rawDataSet;
+
+    } catch(error) {
+        console.log(error);
+        throw error;
+    } 
+}
+
 function generateRandomIds(num: number) {
     const randomIds:number[] = [];
 
@@ -64,7 +111,7 @@ function App() {
                 const idSet = generateRandomIds(12);
 
                 await getPokemonDataSet(idSet)
-                .then((data) => console.log(data))
+                .then((dataSet) => getRawDataSet(dataSet))
                 .catch((error) => console.log(error))
             }
         }
