@@ -1,6 +1,8 @@
-// import { useState } from 'react'
+import { useState } from 'react'
 import { useEffect } from 'react';
 import './App.scss'
+
+import PokemonCell from './components/PokemonCell';
 
 async function fetchPokemonData(link:string) {
     try {
@@ -103,6 +105,8 @@ function generateRandomIds(num: number) {
 }
 
 function App() {
+    const [pokemonDataSet, setPokemonData] = useState([]);
+
     useEffect(() => {
         let ignore = false;
 
@@ -112,6 +116,7 @@ function App() {
 
                 await getPokemonDataSet(idSet)
                 .then((dataSet) => getRawDataSet(dataSet))
+                .then((rawDataSet) => setPokemonData(rawDataSet))
                 .catch((error) => console.log(error))
             }
         }
@@ -123,11 +128,20 @@ function App() {
         }
     }, []);
 
-    return (
-      <>
-        <div>Hello</div>
-      </>
-    )
+    if (pokemonDataSet.length > 0) {
+        return (
+            <>
+                <div>Hello</div>
+                <img src={pokemonDataSet[0].sprite} alt="" />
+                {pokemonDataSet.map(data => (
+                    <PokemonCell pokemonData={data}/>
+                ))}
+            </>
+          )
+    }
 }
 
 export default App
+
+//  remove logs
+//  show sprites ui

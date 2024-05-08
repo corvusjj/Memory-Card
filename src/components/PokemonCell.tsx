@@ -1,7 +1,9 @@
-export default function PokemonCell(imgSrc:string, data) {
+export default function PokemonCell({pokemonData}) {
+    console.log(pokemonData);
+
     return (
         <div className='pokemon-cell'>
-            <img src={imgSrc} alt="pokemon" />
+            <img src={pokemonData.sprite} alt="pokemon" />
         </div>
     );
 }
