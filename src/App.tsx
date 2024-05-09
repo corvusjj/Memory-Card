@@ -99,9 +99,15 @@ async function getRawDataSet(dataSet: PokemonData[]) {
 function generateRandomIds(num: number) {
     const randomIds:number[] = [];
 
+    function getRandomNum() {
+        const randomNum =  Math.floor(Math.random() * 600);
+        if (randomIds.includes(randomNum)) getRandomNum();
+        return randomNum;
+    }
+
     for (let i=0; i < num; i++) {
-        const randomNum = Math.floor(Math.random() * 600);
-        randomIds.push(randomNum);
+        const id = getRandomNum();
+        randomIds.push(id);
     }
 
     return randomIds;
@@ -134,7 +140,7 @@ function App() {
     if (pokemonDataSet.length > 0) {
         return (
             <>
-                <div>Hello</div>
+                <button>Change Pokemons</button>
                 {pokemonDataSet.map(data => (
                     <PokemonCell pokemonData={data} key={data.key}/>
                 ))}
