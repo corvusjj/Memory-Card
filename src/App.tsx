@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react'
+
+import { PokemonData, RawData } from './types/pokemon';
 import './App.scss'
 
 import PokemonCell from './components/PokemonCell';
@@ -32,7 +33,7 @@ async function getPokemonDataSet(idSet:number[]) {
             const link = `https://pokeapi.co/api/v2/pokemon/${idSet[i]}/`;
             const pokemonData = await fetchPokemonData(link);
             
-            console.log(pokemonData.name);
+            console.log(pokemonData);
             pokemonDataSet.push(pokemonData);
         } catch(error) {
             if (error instanceof Error) {
@@ -46,8 +47,8 @@ async function getPokemonDataSet(idSet:number[]) {
     return pokemonDataSet;
 }
 
-async function getRawDataSet(dataSet) {
-    const rawDataSet = [];
+async function getRawDataSet(dataSet: PokemonData[]) {
+    const rawDataSet= [];
     let errorOccurred = false;
 
     async function getRawData(link:string) {
@@ -74,7 +75,7 @@ async function getRawDataSet(dataSet) {
                 const cryAudio = await getRawData(pokemonData.cries.legacy);
                 const sprite = await getRawData(pokemonData.sprites.front_default);
     
-                const pokemonRawData = new Object({name, id, cryAudio, sprite});
+                const pokemonRawData = new Object({name, id, cryAudio, sprite}) as RawData;
                 console.log(pokemonRawData);
                 rawDataSet.push(pokemonRawData);
             } catch(error) {
@@ -105,7 +106,7 @@ function generateRandomIds(num: number) {
 }
 
 function App() {
-    const [pokemonDataSet, setPokemonData] = useState([]);
+    const [pokemonDataSet, setPokemonData] = useState<RawData[]>([]);
 
     useEffect(() => {
         let ignore = false;
@@ -132,16 +133,14 @@ function App() {
         return (
             <>
                 <div>Hello</div>
-                <img src={pokemonDataSet[0].sprite} alt="" />
                 {pokemonDataSet.map(data => (
                     <PokemonCell pokemonData={data}/>
                 ))}
             </>
-          )
+        )
     }
 }
 
 export default App
 
 //  remove logs
-//  show sprites ui
