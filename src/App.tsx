@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { v4 as uuid } from 'uuid';
 
 import { PokemonData, RawData } from './types/pokemon';
 import './App.scss'
@@ -72,10 +73,11 @@ async function getRawDataSet(dataSet: PokemonData[]) {
     
                 const name = pokemonData.name;
                 const id = pokemonData.id;
+                const key = uuid();
                 const cryAudio = await getRawData(pokemonData.cries.legacy);
                 const sprite = await getRawData(pokemonData.sprites.front_default);
     
-                const pokemonRawData = new Object({name, id, cryAudio, sprite}) as RawData;
+                const pokemonRawData = new Object({name, id, key, cryAudio, sprite}) as RawData;
                 console.log(pokemonRawData);
                 rawDataSet.push(pokemonRawData);
             } catch(error) {
@@ -134,7 +136,7 @@ function App() {
             <>
                 <div>Hello</div>
                 {pokemonDataSet.map(data => (
-                    <PokemonCell pokemonData={data}/>
+                    <PokemonCell pokemonData={data} key={data.key}/>
                 ))}
             </>
         )

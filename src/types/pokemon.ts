@@ -3,6 +3,7 @@ export interface RawData {
     id: number
     cryAudio: string
     sprite: string
+    key:string
 }
 
 export interface PokemonData {
