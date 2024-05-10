@@ -74,7 +74,7 @@ async function getRawDataSet(dataSet: PokemonData[]) {
                 const name = pokemonData.name;
                 const id = pokemonData.id;
                 const key = uuid();
-                const cryAudio = await getRawData(pokemonData.cries.legacy);
+                const cryAudio = await getRawData(pokemonData.cries.latest);
                 const sprite = await getRawData(pokemonData.sprites.front_default);
     
                 const pokemonRawData = new Object({name, id, key, cryAudio, sprite}) as RawData;
@@ -113,42 +113,60 @@ function generateRandomIds(num: number) {
     return randomIds;
 }
 
+const initialIds = generateRandomIds(12);
+
 function App() {
     const [pokemonDataSet, setPokemonData] = useState<RawData[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [idSet, setIdSet] = useState(initialIds);
+
+    function changePokemonSet() {
+        const newIdSet = generateRandomIds(12);
+        setIdSet(newIdSet);
+    }
 
     useEffect(() => {
         let ignore = false;
 
-        async function getData() {
+        async function getPokemonData() {
             if (!ignore) {
-                const idSet = generateRandomIds(12);
+                try {
+                    setIsLoading(true);
 
-                await getPokemonDataSet(idSet)
-                .then((dataSet) => getRawDataSet(dataSet))
-                .then((rawDataSet) => setPokemonData(rawDataSet))
-                .catch((error) => console.log(error))
+                    const dataSet = await getPokemonDataSet(idSet);
+                    const rawDataSet = await getRawDataSet(dataSet);
+                    setPokemonData(rawDataSet);
+                    setIsLoading(false);
+                } catch(error) {
+                    console.log(error);
+                    setIsLoading(false);
+                }
             }
         }
 
-        getData();
+        getPokemonData();
 
         return () => {
             ignore = true;
         }
-    }, []);
+    }, [idSet]);
 
-    if (pokemonDataSet.length > 0) {
-        return (
-            <>
-                <button>Change Pokemons</button>
+    if (isLoading) return <>loading...</>
+
+    return (
+        <>
+            <button onClick={changePokemonSet}>Change Pokemons</button>
+            <div className='pokemon-board'>
                 {pokemonDataSet.map(data => (
                     <PokemonCell pokemonData={data} key={data.key}/>
                 ))}
-            </>
-        )
-    }
+            </div>
+        </>
+    )
 }
 
 export default App
 
+//  refactor useEffect, separate component
+//  grid pokemon cells, place bush
 //  remove logs
