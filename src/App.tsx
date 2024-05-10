@@ -100,8 +100,8 @@ function generateRandomIds(num: number) {
     const randomIds:number[] = [];
 
     function getRandomNum() {
-        const randomNum =  Math.floor(Math.random() * 600);
-        if (randomIds.includes(randomNum)) getRandomNum();
+        let randomNum =  Math.floor(Math.random() * 600) + 1;
+        if (randomIds.includes(randomNum)) randomNum = getRandomNum();
         return randomNum;
     }
 
