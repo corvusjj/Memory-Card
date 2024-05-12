@@ -16,10 +16,9 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     }
 
     return (
-        <div className='pokemon-cell'>
-            <img src={pokemonData.sprite} alt="pokemon" />
-            <button onClick={playCryAudio}>Cry</button>
-
+        <div className='pokemon-cell' onClick={playCryAudio}>
+            <img className='bush-sprite' src="../../images/bush-3.webp" alt="" />
+            <img className='pokemon-sprite' src={pokemonData.sprite} alt="pokemon" />
             <audio ref={audioRef} src={pokemonData.cryAudio}></audio>
         </div>
     );
