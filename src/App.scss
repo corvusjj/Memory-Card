@@ -22,34 +22,60 @@ body {
     margin-top: 30px;
 }
 
+@keyframes shake {
+    from {
+        transform: translateX(0);
+    } to {
+        transform: translateX(2px);
+    }
+}
+
 .pokemon-cell {
     width: 70px;
     height: 70px;
     // border: 1px solid blue;
     position: relative;
+    cursor: pointer;
 
-    .bush-sprite {
+    &.shake-active {
+        animation: shake 0.1s infinite alternate;
+    }
+
+    img.bush-sprite {
         width: 100%;
         height: 100%;
         position: absolute;
         z-index: 2;
     }
 
-    .pokemon-sprite {
+    img.pokemon-sprite {
         z-index: 1;
         width: 90%;
         height: 90%;
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -120%);
+        transform: translate(-50%, -50%);
+        // transform: translate(-50%, -120%);
         // border: 1px solid red;
     }
 }
 
-img {
-    width: 100px;
-    height: 100px;
+.bush-render-test {
+    margin-top: 20px;
+    display: flex;
+    border: 1px solid #000;
+    
+    img {
+        width: 90px;
+        height: 90px;
+        position: relative;
+        // animation: shake 0.1s infinite alternate;
+    }
+
+    img.shake {
+        animation: shake 0.1s infinite alternate;
+    }
 }
 
 button {

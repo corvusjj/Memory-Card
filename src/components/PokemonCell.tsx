@@ -6,7 +6,8 @@ interface PokemonDataProps {
 }
 
 export default function PokemonCell({pokemonData}: PokemonDataProps) {
-    const audioRef = useRef<HTMLAudioElement>(null)
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const cellRef = useRef<HTMLDivElement>(null);
 
     function playCryAudio() {
         if (audioRef.current) {
@@ -15,8 +16,21 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
         }
     }
 
+    function shakeBush() {
+        cellRef.current?.classList.add('shake-active');
+
+        setTimeout(() => {
+            cellRef.current?.classList.remove('shake-active');
+        }, 700);
+    }
+
+    function handleClick() {
+        playCryAudio();
+        shakeBush();
+    }
+
     return (
-        <div className='pokemon-cell' onClick={playCryAudio}>
+        <div ref={cellRef} className='pokemon-cell' onClick={handleClick}>
             <img className='bush-sprite' src="../../images/bush-3.webp" alt="" />
             <img className='pokemon-sprite' src={pokemonData.sprite} alt="pokemon" />
             <audio ref={audioRef} src={pokemonData.cryAudio}></audio>
