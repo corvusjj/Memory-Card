@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid';
 
 import { PokemonData, RawData } from './types/pokemon';
-import './App.scss'
 
 import PokemonCell from './components/PokemonCell';
+import BushRenderTest from './components/BushRenderTest';
 
 async function fetchPokemonData(link:string) {
     try {
@@ -113,7 +113,7 @@ function generateRandomIds(num: number) {
     return randomIds;
 }
 
-const initialIds = generateRandomIds(12);
+const initialIds = generateRandomIds(16);
 
 function App() {
     const [pokemonDataSet, setPokemonData] = useState<RawData[]>([]);
@@ -121,7 +121,7 @@ function App() {
     const [idSet, setIdSet] = useState(initialIds);
 
     function changePokemonSet() {
-        const newIdSet = generateRandomIds(12);
+        const newIdSet = generateRandomIds(16);
         setIdSet(newIdSet);
     }
 
@@ -161,6 +161,7 @@ function App() {
                     <PokemonCell pokemonData={data} key={data.key}/>
                 ))}
             </div>
+            <BushRenderTest/>
         </>
     )
 }
