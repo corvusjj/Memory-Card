@@ -59,6 +59,18 @@ body {
         }
     }
 
+    @keyframes hit {
+        0% {
+            transform: translate(-50%, -50%);
+        } 20% {
+            transform: translate(-50%, -130%) rotate(90deg);
+        } 80% {
+            transform: translate(-50%, -130%) rotate(90deg);
+        } 100% {
+            transform: translate(-50%, -50%);
+        }
+    }
+
     img.pokemon-sprite {
         z-index: 1;
         width: 90%;
@@ -74,6 +86,10 @@ body {
 
         &[data-show="false"] {
             transform: translate(-50%, -50%);
+        }
+
+        &.hit {
+            animation: hit 2s ease;
         }
     }
 }
