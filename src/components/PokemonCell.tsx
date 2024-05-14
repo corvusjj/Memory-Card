@@ -9,6 +9,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const cellRef = useRef<HTMLDivElement>(null);
     const bushSpritesRef = useRef<HTMLDivElement>(null);
+    const pokemonSpriteRef = useRef<HTMLImageElement>(null);
 
     function playCryAudio() {
         if (audioRef.current) {
@@ -46,10 +47,20 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
         }
     }
 
+    function togglePokemon(show:boolean) {
+        show? 
+        pokemonSpriteRef.current?.setAttribute('data-show', 'true'):
+        pokemonSpriteRef.current?.setAttribute('data-show', 'false');
+    }
+
     function handleClick() {
         playCryAudio();
         shakeBush();
     }
+
+    setTimeout(animateBush, Math.floor(Math.random() * 500));
+    setTimeout(() => togglePokemon(true), 1000);
+    setTimeout(() => togglePokemon(false), 4000);
 
     return (
         <div ref={cellRef} className='pokemon-cell' onClick={handleClick}>
@@ -58,7 +69,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
                 <img className='bush-sprite' src="../../images/bush-2.webp" alt="" />
                 <img className='bush-sprite show' src="../../images/bush-3.webp" alt="" />
             </div>
-            <img className='pokemon-sprite' src={pokemonData.sprite} alt="pokemon" />
+            <img ref={pokemonSpriteRef} className='pokemon-sprite' src={pokemonData.sprite} data-show="false" alt="pokemon" />
             <audio ref={audioRef} src={pokemonData.cryAudio}></audio>
         </div>
     );
