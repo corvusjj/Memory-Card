@@ -3,9 +3,10 @@ import { RawData } from '../types/pokemon';
 
 interface PokemonDataProps {
     pokemonData: RawData
+    runHit: (id:number) => void;
 }
 
-export default function PokemonCell({pokemonData}: PokemonDataProps) {
+export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const cellRef = useRef<HTMLDivElement>(null);
     const bushSpritesRef = useRef<HTMLDivElement>(null);
@@ -56,6 +57,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     }
 
     function hitPokemon() {
+        runHit(pokemonData.id);
         pokemonSpriteRef.current?.classList.add('hit');
 
         setTimeout(() => {

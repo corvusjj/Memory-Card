@@ -8,9 +8,7 @@ interface RawDataProps {
 
 export default function Game({pokemonDataSet}:RawDataProps) {
     const [pokemons, setPokemons] = useState(pokemonDataSet);
-    const hitPokemonIds = [];
-
-    const score = 0;
+    const hitPokemonIds:number[] = [];
 
     function shufflePokemons() {
         setPokemons(pokemons => {
@@ -18,11 +16,16 @@ export default function Game({pokemonDataSet}:RawDataProps) {
         });
     }
 
+    function runHit(id:number) {
+        if (hitPokemonIds.includes(id)) return console.log('game-over');
+        hitPokemonIds.push(id);
+    }
+
     return (
         <div className="game">
-            <span>Score {score} / 16</span>
+            {/* <span>Score {score} / 16</span> */}
             <button onClick={shufflePokemons}>Shuffle</button>
-            <PokemonBoard pokemonRawData={pokemons}/>
+            <PokemonBoard pokemonRawData={pokemons} runHit={runHit}/>
         </div>
     );
 }

@@ -20,6 +20,10 @@ body {
     column-gap: 10px;
     row-gap: 35px;
     margin-top: 30px;
+
+    &[data-inactive] {
+        pointer-events: none;
+    }
 }
 
 @keyframes shake {
