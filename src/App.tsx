@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid';
 
 import { PokemonData, RawData } from './types/pokemon';
-
-import PokemonBoard from './components/PokemonBoard';
+import Game from './components/Game';
 import BushRenderTest from './components/BushRenderTest';
 
 async function fetchPokemonData(link:string) {
@@ -156,7 +155,7 @@ function App() {
     return (
         <>
             <button onClick={changePokemonSet}>Change Pokemons</button>
-            <PokemonBoard pokemonRawData={pokemonDataSet}/>
+            <Game pokemonDataSet={pokemonDataSet}/>
             <BushRenderTest/>
         </>
     )
