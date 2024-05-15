@@ -47,10 +47,14 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
         }
     }
 
-    function togglePokemon(show:boolean) {
-        show? 
-        pokemonSpriteRef.current?.setAttribute('data-show', 'true'):
-        pokemonSpriteRef.current?.setAttribute('data-show', 'false');
+    function revealPokemon() {
+        setTimeout(() => {
+            pokemonSpriteRef.current?.classList.add('reveal');
+        }, 600);
+
+        setTimeout(() => {
+            pokemonSpriteRef.current?.classList.remove('reveal');
+        }, 3500);
     }
 
     function hitPokemon() {
@@ -58,7 +62,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
 
         setTimeout(() => {
             pokemonSpriteRef.current?.classList.remove('hit');
-        }, 3000);
+        }, 1800);
     }
 
     function handleClick() {
@@ -67,8 +71,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     }
 
     setTimeout(animateBush, Math.floor(Math.random() * 500));
-    setTimeout(() => togglePokemon(true), 1000);
-    setTimeout(() => togglePokemon(false), 4000);
+    revealPokemon();
 
     return (
         <div ref={cellRef} className='pokemon-cell' onClick={handleClick} onDoubleClick={hitPokemon}>
@@ -77,8 +80,8 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
                 <img className='bush-sprite' src="../../images/bush-2.webp" alt="" />
                 <img className='bush-sprite show' src="../../images/bush-3.webp" alt="" />
             </div>
-            <img ref={pokemonSpriteRef} className='pokemon-sprite' src={pokemonData.sprite} data-show="false" alt="pokemon" />
+            <img ref={pokemonSpriteRef} className='pokemon-sprite' src={pokemonData.sprite} alt="pokemon" />
             <audio ref={audioRef} src={pokemonData.cryAudio}></audio>
-        </div> 
+        </div>
     );
 }
