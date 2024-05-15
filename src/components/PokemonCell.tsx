@@ -48,13 +48,11 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     }
 
     function revealPokemon() {
-        setTimeout(() => {
-            pokemonSpriteRef.current?.classList.add('reveal');
-        }, 600);
+        pokemonSpriteRef.current?.classList.add('reveal');
 
         setTimeout(() => {
             pokemonSpriteRef.current?.classList.remove('reveal');
-        }, 3500);
+        }, 3000);
     }
 
     function hitPokemon() {
@@ -71,7 +69,7 @@ export default function PokemonCell({pokemonData}: PokemonDataProps) {
     }
 
     setTimeout(animateBush, Math.floor(Math.random() * 500));
-    revealPokemon();
+    setTimeout(revealPokemon, 800);
 
     return (
         <div ref={cellRef} className='pokemon-cell' onClick={handleClick} onDoubleClick={hitPokemon}>
