@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { PokemonData, RawData } from './types/pokemon';
 
-import PokemonCell from './components/PokemonCell';
+import PokemonBoard from './components/PokemonBoard';
 import BushRenderTest from './components/BushRenderTest';
 
 async function fetchPokemonData(link:string) {
@@ -156,11 +156,7 @@ function App() {
     return (
         <>
             <button onClick={changePokemonSet}>Change Pokemons</button>
-            <div className='pokemon-board'>
-                {pokemonDataSet.map(data => (
-                    <PokemonCell pokemonData={data} key={data.key}/>
-                ))}
-            </div>
+            <PokemonBoard pokemonRawData={pokemonDataSet}/>
             <BushRenderTest/>
         </>
     )
@@ -168,6 +164,5 @@ function App() {
 
 export default App
 
-//  refactor useEffect, separate component
-//  grid pokemon cells, place bush
+//  lifting child component functions up
 //  remove logs
