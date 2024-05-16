@@ -1,7 +1,7 @@
-import { useState, useImperativeHandle, forwardRef, useRef } from "react";
+import { useState, useImperativeHandle, forwardRef, useRef, SetStateAction } from "react";
 
 export interface ScoreBoardRef {
-    addScore: () => void;
+    updateScore: (score:number) => void;
 }
 
 const ScoreBoard = forwardRef((_props, ref) => {
@@ -10,8 +10,8 @@ const ScoreBoard = forwardRef((_props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            addScore() {
-                setScore(score + 1);
+            updateScore(score: SetStateAction<number>) {
+                setScore(score);
             }
         }
     });
