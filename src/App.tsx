@@ -134,8 +134,8 @@ function App() {
 
                     const dataSet = await getPokemonDataSet(idSet);
                     const rawDataSet = await getRawDataSet(dataSet);
-                    setPokemonData(rawDataSet);
                     setIsLoading(false);
+                    setPokemonData(rawDataSet);
                 } catch(error) {
                     console.log(error);
                     setIsLoading(false);
@@ -150,12 +150,10 @@ function App() {
         }
     }, [idSet]);
 
-    if (isLoading) return <>loading...</>
-
     return (
         <>
             <button onClick={changePokemonSet}>Change Pokemons</button>
-            <Game pokemonDataSet={pokemonDataSet}/>
+            <Game pokemonDataSet={pokemonDataSet} isLoading={isLoading}/>
             <BushRenderTest/>
         </>
     )

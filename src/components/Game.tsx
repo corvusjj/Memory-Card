@@ -1,10 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import LoadingPage from './LoadingPage';
 import PokemonBoard from './PokemonBoard';
 import ScoreBoard, { ScoreBoardRef } from './ScoreBoard';
 import { RawData } from '../types/pokemon';
 
 interface RawDataProps {
     pokemonDataSet: RawData[];
+    isLoading: boolean;
 }
 
 interface GameDataProps {
@@ -13,14 +15,22 @@ interface GameDataProps {
     score: number;
 }
 
-export default function Game({pokemonDataSet}:RawDataProps) {
-    // const [pokemons, setPokemons] = useState(pokemonDataSet);
-
+export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
     const [gameData, setGameData] = useState<GameDataProps>({
         pokemons: pokemonDataSet,
         hitIds: [],
         score: 0
     });
+
+    useEffect(() => {
+        if (pokemonDataSet && pokemonDataSet.length > 0) {
+          setGameData({
+            pokemons: pokemonDataSet,
+            hitIds: [],
+            score: 0
+          });
+        }
+      }, [pokemonDataSet]);
 
     const scoreBoardRef = useRef<ScoreBoardRef>(null);
 
@@ -35,28 +45,39 @@ export default function Game({pokemonDataSet}:RawDataProps) {
     }   
 
     function runHit(id:number) {
+        const shuffledPokemonSet = shufflePokemons();
+        let newHitIds:number[];
+        let newScore:number;
+
         if (gameData.hitIds.includes(id)) {
-            console.log('game-over');
+            newHitIds = [];
+            newScore = 0;
         } else {
-            const newHitIds = [...gameData.hitIds, id];
-            const shuffledPokemonSet = shufflePokemons();
-            const newScore = gameData.score + 1;
+            newHitIds = [...gameData.hitIds, id];
+            newScore = gameData.score + 1;
 
-            updateScoreBoard(newScore);
-
-           setTimeout(() => {
-            setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
-           }, 2000);
+            if (newScore === 16) return console.log('you hit them all!');
         }
+
+        updateScoreBoard(newScore);
+
+        setTimeout(() => {
+            setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
+        }, 2000);
     }
 
     return (
         <div className="game">
-            {/* <button onClick={shufflePokemons}>Shuffle</button> */}
-            <ScoreBoard ref={scoreBoardRef} />
-            <PokemonBoard pokemonRawData={gameData.pokemons} runHit={runHit}/>
+            {isLoading? (
+                <LoadingPage/>
+            ) : (
+                <>
+                    <ScoreBoard ref={scoreBoardRef} />
+                    <PokemonBoard pokemonRawData={gameData.pokemons} runHit={runHit}/>
+                </>
+            )}            
         </div>
     );
 }
 
-//  updateScore() scoreBoard
+// render prob
