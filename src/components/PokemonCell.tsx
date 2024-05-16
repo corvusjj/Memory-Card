@@ -65,16 +65,54 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         }, 1800);
     }
 
-    function handleClick() {
+    //  onClick / long-press event
+    const timerRef = useRef<number | null>(null);
+    const isLongPress = useRef(false);
+
+    function handleLongPress() {
         playCryAudio();
         shakeBush();
     }
 
+    const handleTouchStart = () => {
+        isLongPress.current = false;
+        timerRef.current = window.setTimeout(() => {
+            isLongPress.current = true;
+            handleLongPress();
+        }, 500);
+    }
+
+    const handleTouchEnd = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
+        if (!isLongPress.current) {
+            hitPokemon();
+        }
+    }
+
+    const handleClick = (e: { preventDefault: () => void; }) => {
+        if (isLongPress.current) {
+            e.preventDefault();  // prevent onClick if it's long press
+            isLongPress.current = false; 
+        }
+    }
+
+    //  run every render
     setTimeout(animateBush, Math.floor(Math.random() * 500));
     setTimeout(revealPokemon, 800);
 
     return (
-        <div ref={cellRef} className='pokemon-cell' onClick={handleClick} onDoubleClick={hitPokemon}>
+        <div ref={cellRef} 
+            className='pokemon-cell' 
+            onClick={handleClick}
+            onTouchStart={handleTouchStart}
+            onMouseDown={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseUp={handleTouchEnd}
+        >
             <div ref={bushSpritesRef} className="bush-sprites">
                 <img className='bush-sprite' src="../../images/bush-1.webp" alt="" />
                 <img className='bush-sprite' src="../../images/bush-2.webp" alt="" />
