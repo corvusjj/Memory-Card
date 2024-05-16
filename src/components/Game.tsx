@@ -10,6 +10,7 @@ interface RawDataProps {
 interface GameDataProps {
     pokemons: RawData[];
     hitIds: number[];
+    score: number;
 }
 
 export default function Game({pokemonDataSet}:RawDataProps) {
@@ -17,7 +18,8 @@ export default function Game({pokemonDataSet}:RawDataProps) {
 
     const [gameData, setGameData] = useState<GameDataProps>({
         pokemons: pokemonDataSet,
-        hitIds: []
+        hitIds: [],
+        score: 0
     });
 
     const scoreBoardRef = useRef<ScoreBoardRef>(null);
@@ -26,9 +28,9 @@ export default function Game({pokemonDataSet}:RawDataProps) {
         return [...gameData.pokemons.sort(() => Math.random() - 0.5)];
     }
 
-    function updateScoreBoard() {
+    function updateScoreBoard(score:number) {
         if (scoreBoardRef.current) {
-            scoreBoardRef.current.addScore();
+            scoreBoardRef.current.updateScore(score);
         }
     }   
 
@@ -36,11 +38,15 @@ export default function Game({pokemonDataSet}:RawDataProps) {
         if (gameData.hitIds.includes(id)) {
             console.log('game-over');
         } else {
-            updateScoreBoard();
-
             const newHitIds = [...gameData.hitIds, id];
             const shuffledPokemonSet = shufflePokemons();
-            setGameData({pokemons: shuffledPokemonSet, hitIds: newHitIds});
+            const newScore = gameData.score + 1;
+
+            updateScoreBoard(newScore);
+
+           setTimeout(() => {
+            setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
+           }, 2000);
         }
     }
 
