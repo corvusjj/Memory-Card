@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useImperativeHandle, forwardRef, useRef } from "react";
 
-export default function ScoreBoard() {
+export interface ScoreBoardRef {
+    addScore: () => void;
+}
+
+const ScoreBoard = forwardRef((_props, ref) => {
     const [score, setScore] = useState(0);
+    const scoreBoardRef = useRef<HTMLDivElement>(null);
 
-    function addScore() {
-        setScore(score + 1);
-    }
+    useImperativeHandle(ref, () => {
+        return {
+            addScore() {
+                setScore(score + 1);
+            }
+        }
+    });
 
     return (
-        <div id="score-board">
+        <div ref={scoreBoardRef} id="score-board">
             <span>Score: {score} / 16</span>
         </div>
     );
-}
+});
+
+export default ScoreBoard;
