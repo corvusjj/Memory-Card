@@ -16,7 +16,7 @@ export default function PokemonBoard({pokemonRawData, runHit}:RawDataProps) {
 
         setTimeout(() => {
             gameBoardRef.current?.removeAttribute('data-inactive');
-        }, 5000);
+        }, 6000);
     }
 
     return (

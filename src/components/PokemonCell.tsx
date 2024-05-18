@@ -12,6 +12,8 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     const bushSpritesRef = useRef<HTMLDivElement>(null);
     const pokemonSpriteRef = useRef<HTMLImageElement>(null);
 
+    const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
+
     function shakeBush() {
         cellRef.current?.classList.add('shake-active');
 
@@ -34,8 +36,10 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         }, 1800);
     }
 
-    function hitPokemon() {
+    async function hitPokemon() {
         runHit(pokemonData.id);
+        await delay(1000);
+        
         animatePokemonHit();    
         playCryAudio();
     }
@@ -79,7 +83,6 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     // ================================================= RUN EVERY RENDER ========================================================
 
     async function animateBush() {
-        const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
         shakeBush();
         
         if (bushSpritesRef.current) {

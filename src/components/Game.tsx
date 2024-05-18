@@ -25,6 +25,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
 
     const scoreBoardRef = useRef<ScoreBoardRef>(null);
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
+    const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
         if (pokemonDataSet && pokemonDataSet.length > 0) {
@@ -52,7 +53,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         }
     }
 
-    function activateHit(id:number) {
+    async function activateHit(id:number) {
         animateThrower();
 
         const shuffledPokemonSet = shufflePokemons();
@@ -67,13 +68,13 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
             newScore = gameData.score + 1;
         }
 
+        await delay(3000);
+
         updateScoreBoard(newScore);
         if (newScore === 16) return console.log('you hit them all!');
 
         //  rerender board with shuffled pokemons
-        setTimeout(() => {
-            setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
-        }, 2000);
+        setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
     }
 
     return (

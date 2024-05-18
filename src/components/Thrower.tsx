@@ -12,7 +12,7 @@ const Thrower = forwardRef((_props, ref) => {
     async function hideThrower() {
         if (throwerContainer.current) {
             throwerContainer.current.classList.add('hide');
-            await delay(3500);
+            await delay(6000);
             throwerContainer.current.classList.remove('hide');
         }
     }   
