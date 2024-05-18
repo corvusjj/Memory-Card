@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import LoadingPage from './LoadingPage';
+import Thrower from './Thrower';
 import PokemonBoard from './PokemonBoard';
 import ScoreBoard, { ScoreBoardRef } from './ScoreBoard';
 import { RawData } from '../types/pokemon';
@@ -22,6 +23,8 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         score: 0
     });
 
+    const scoreBoardRef = useRef<ScoreBoardRef>(null);
+
     useEffect(() => {
         if (pokemonDataSet && pokemonDataSet.length > 0) {
           setGameData({
@@ -31,8 +34,6 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
           });
         }
       }, [pokemonDataSet]);
-
-    const scoreBoardRef = useRef<ScoreBoardRef>(null);
 
     function shufflePokemons() {
         return [...gameData.pokemons.sort(() => Math.random() - 0.5)];
@@ -44,7 +45,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         }
     }   
 
-    function runHit(id:number) {
+    function activateHit(id:number) {
         const shuffledPokemonSet = shufflePokemons();
         let newHitIds:number[];
         let newScore:number;
@@ -55,11 +56,10 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         } else {
             newHitIds = [...gameData.hitIds, id];
             newScore = gameData.score + 1;
-
-            if (newScore === 16) return console.log('you hit them all!');
         }
 
         updateScoreBoard(newScore);
+        if (newScore === 16) return console.log('you hit them all!');
 
         setTimeout(() => {
             setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
@@ -73,11 +73,12 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
             ) : (
                 <>
                     <ScoreBoard ref={scoreBoardRef} />
-                    <PokemonBoard pokemonRawData={gameData.pokemons} runHit={runHit}/>
+                    <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
+                    <Thrower/>
                 </>
             )}            
         </div>
     );
 }
 
-// render prob
+//  bush audio
