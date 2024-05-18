@@ -9,9 +9,18 @@ const Thrower = forwardRef((_props, ref) => {
     const throwerSprite = useRef<HTMLImageElement>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
+    async function hideThrower() {
+        if (throwerContainer.current) {
+            throwerContainer.current.classList.add('hide');
+            await delay(3500);
+            throwerContainer.current.classList.remove('hide');
+        }
+    }   
+
     useImperativeHandle(ref, () => {
         return {
             async animateThrow() {
+                hideThrower();
                 if (throwerSprite.current) {
                     let leftDistance = 0;
         
