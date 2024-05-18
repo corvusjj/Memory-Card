@@ -70,7 +70,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
                 pokeballRef.current.style.left = '30px';
                 pokeballRef.current.style.top = 'calc(100% - 120px)';
             }
-        }, 1500);
+        }, 1200);
     }
 
     async function activateHit(id:number, cellCoordinates:number[]) {
@@ -107,7 +107,9 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
                     <ScoreBoard ref={scoreBoardRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
-                    <div ref={pokeballRef} id='pokeball'></div>
+                    <div ref={pokeballRef} id='pokeball'>
+                        <img src="../../images/pokeball.png" alt="" />
+                    </div>
                 </>
             )}            
         </div>
