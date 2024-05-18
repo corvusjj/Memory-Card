@@ -12,13 +12,6 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     const bushSpritesRef = useRef<HTMLDivElement>(null);
     const pokemonSpriteRef = useRef<HTMLImageElement>(null);
 
-    function playCryAudio() {
-        if (audioRef.current) {
-            audioRef.current.volume = 0.5;
-            audioRef.current.play();
-        }
-    }
-
     function shakeBush() {
         cellRef.current?.classList.add('shake-active');
 
@@ -27,45 +20,28 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         }, 700);
     }
 
-    async function animateBush() {
-        const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
-        
-        if (bushSpritesRef.current) {
-            const bushSprites: HTMLImageElement[] = Array.from(bushSpritesRef.current.childNodes) as HTMLImageElement[];
-
-            let lastBushSprite;
-            let activeBushSprite = bushSprites[2];
-            const indexPattern = [1, 0, 1, 2];
-
-            for(let i=0; i<indexPattern.length; i++) {
-                lastBushSprite = activeBushSprite;
-                activeBushSprite = bushSprites[indexPattern[i]];
-                lastBushSprite.classList.remove('show');
-                activeBushSprite.classList.add('show');
-
-                await delay(150);
-            }
+    function playCryAudio() {
+        if (audioRef.current) {
+            audioRef.current.volume = 0.5;
+            audioRef.current.play();
         }
     }
 
-    function revealPokemon() {
-        pokemonSpriteRef.current?.classList.add('reveal');
-
-        setTimeout(() => {
-            pokemonSpriteRef.current?.classList.remove('reveal');
-        }, 3000);
-    }
-
-    function hitPokemon() {
-        runHit(pokemonData.id);
+    function animatePokemonHit() {
         pokemonSpriteRef.current?.classList.add('hit');
-
         setTimeout(() => {
             pokemonSpriteRef.current?.classList.remove('hit');
         }, 1800);
     }
 
-    //  onClick / long-press event
+    function hitPokemon() {
+        runHit(pokemonData.id);
+        animatePokemonHit();    
+        playCryAudio();
+    }
+
+    //  =============================================== ONCLICK / LONG-PRESS EVENTS =======================================================
+    
     const timerRef = useRef<number | null>(null);
     const isLongPress = useRef(false);
 
@@ -100,7 +76,38 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         }
     }
 
-    //  run every render
+    // ================================================= RUN EVERY RENDER ========================================================
+
+    async function animateBush() {
+        const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
+        shakeBush();
+        
+        if (bushSpritesRef.current) {
+            const bushSprites: HTMLImageElement[] = Array.from(bushSpritesRef.current.childNodes) as HTMLImageElement[];
+
+            let lastBushSprite;
+            let activeBushSprite = bushSprites[2];
+            const indexPattern = [1, 0, 1, 2];
+
+            for(let i=0; i<indexPattern.length; i++) {
+                lastBushSprite = activeBushSprite;
+                activeBushSprite = bushSprites[indexPattern[i]];
+                lastBushSprite.classList.remove('show');
+                activeBushSprite.classList.add('show');
+
+                await delay(150);
+            }
+        }
+    }
+
+    function revealPokemon() {
+        pokemonSpriteRef.current?.classList.add('reveal');
+
+        setTimeout(() => {
+            pokemonSpriteRef.current?.classList.remove('reveal');
+        }, 3000);
+    }
+
     setTimeout(animateBush, Math.floor(Math.random() * 500));
     setTimeout(revealPokemon, 800);
 
