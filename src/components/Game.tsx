@@ -25,6 +25,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
 
     const scoreBoardRef = useRef<ScoreBoardRef>(null);
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
+    const pokeballRef = useRef<HTMLDivElement>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
@@ -53,8 +54,28 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         }
     }
 
-    async function activateHit(id:number) {
+    function animatePokeBall(cellCoordinates:number[]) {
+        const [x, y] = cellCoordinates;
+
+        setTimeout(() => {
+            if (pokeballRef.current) {
+                pokeballRef.current.classList.add('throw');
+                pokeballRef.current.style.left = x + 'px';
+                pokeballRef.current.style.top = y + 'px';
+            }
+        }, 400);
+        setTimeout(() => {
+            if (pokeballRef.current) {
+                pokeballRef.current.classList.remove('throw');
+                pokeballRef.current.style.left = '30px';
+                pokeballRef.current.style.top = 'calc(100% - 120px)';
+            }
+        }, 1500);
+    }
+
+    async function activateHit(id:number, cellCoordinates:number[]) {
         animateThrower();
+        animatePokeBall(cellCoordinates);
 
         const shuffledPokemonSet = shufflePokemons();
         let newHitIds:number[];
@@ -86,6 +107,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
                     <ScoreBoard ref={scoreBoardRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
+                    <div ref={pokeballRef} id='pokeball'></div>
                 </>
             )}            
         </div>
@@ -93,3 +115,6 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
 }
 
 //  bush audio
+//  audio toggling
+//  throw-ball animation
+//  styling

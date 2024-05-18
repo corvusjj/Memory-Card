@@ -154,6 +154,22 @@ body {
     }
 }
 
+#pokeball {
+    width: 30px;
+    height: 30px;
+    border: 1px solid blue;
+    position: absolute;
+    left: 30px;
+    top: calc(100% - 120px);
+    opacity: 0;
+    transition: left 0.7s ease-out, top 0.7s ease-out, transform 0.7s ease-out;
+
+    &.throw {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+}
+
 button {
     padding: 1rem;
 }

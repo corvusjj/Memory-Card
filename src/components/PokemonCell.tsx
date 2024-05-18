@@ -3,7 +3,7 @@ import { RawData } from '../types/pokemon';
 
 interface PokemonDataProps {
     pokemonData: RawData
-    runHit: (id:number) => void;
+    runHit: (id:number, coordinates:number[]) => void;
 }
 
 export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
@@ -37,7 +37,15 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     }
 
     async function hitPokemon() {
-        runHit(pokemonData.id);
+        let leftCellDistance:number = 0;
+        let topCellDistance:number = 0;
+
+        if (cellRef.current) {
+            leftCellDistance = cellRef.current.getBoundingClientRect().x;
+            topCellDistance = cellRef.current.getBoundingClientRect().y;
+        }
+
+        runHit(pokemonData.id, [leftCellDistance, topCellDistance]);
         await delay(1000);
         
         animatePokemonHit();    
