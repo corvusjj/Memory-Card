@@ -1,29 +1,37 @@
-import { useRef } from "react";
+import { useRef, useImperativeHandle, forwardRef } from "react";
 
-export default function Thrower() {
+export interface ThrowerContainerRef {
+    animateThrow: () => void;
+}
+
+const Thrower = forwardRef((_props, ref) => {
+    const throwerContainer = useRef<HTMLDivElement>(null);
     const throwerSprite = useRef<HTMLImageElement>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
-    async function animateThrower() {
-        if (throwerSprite.current) {
-            let leftDistance = 0;
-
-            while (leftDistance <= 400) {
-                throwerSprite.current.style.left = '-' + leftDistance + '%';
-                leftDistance += 100;
-                await delay(160);
+    useImperativeHandle(ref, () => {
+        return {
+            async animateThrow() {
+                if (throwerSprite.current) {
+                    let leftDistance = 0;
+        
+                    while (leftDistance <= 400) {
+                        throwerSprite.current.style.left = '-' + leftDistance + '%';
+                        leftDistance += 100;
+                        await delay(160);
+                    }
+        
+                    throwerSprite.current.style.left = '0%';
+                }
             }
-
-            throwerSprite.current.style.left = '0%';
         }
-    }
+    });
 
     return (
-        <>
-            <button onClick={animateThrower}>Throw</button>
-            <div className="thrower-container">
+        <div ref={throwerContainer} className="thrower-container">
                 <img ref={throwerSprite} src="../../images/thrower.png" alt="" />
-            </div>
-        </>
+        </div>
     );
-}
+});
+
+export default Thrower;

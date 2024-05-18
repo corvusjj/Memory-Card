@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import LoadingPage from './LoadingPage';
-import Thrower from './Thrower';
+import Thrower, { ThrowerContainerRef } from './Thrower';
 import PokemonBoard from './PokemonBoard';
 import ScoreBoard, { ScoreBoardRef } from './ScoreBoard';
 import { RawData } from '../types/pokemon';
@@ -24,6 +24,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
     });
 
     const scoreBoardRef = useRef<ScoreBoardRef>(null);
+    const throwerContainerRef = useRef<ThrowerContainerRef>(null);
 
     useEffect(() => {
         if (pokemonDataSet && pokemonDataSet.length > 0) {
@@ -43,9 +44,17 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         if (scoreBoardRef.current) {
             scoreBoardRef.current.updateScore(score);
         }
-    }   
+    }
+    
+    function animateThrower() {
+        if (throwerContainerRef.current) {
+            throwerContainerRef.current.animateThrow();
+        }
+    }
 
     function activateHit(id:number) {
+        animateThrower();
+
         const shuffledPokemonSet = shufflePokemons();
         let newHitIds:number[];
         let newScore:number;
@@ -61,6 +70,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
         updateScoreBoard(newScore);
         if (newScore === 16) return console.log('you hit them all!');
 
+        //  rerender board with shuffled pokemons
         setTimeout(() => {
             setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
         }, 2000);
@@ -74,7 +84,7 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
                 <>
                     <ScoreBoard ref={scoreBoardRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
-                    <Thrower/>
+                    <Thrower ref={throwerContainerRef}/>
                 </>
             )}            
         </div>
