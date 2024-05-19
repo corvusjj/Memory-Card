@@ -16,7 +16,20 @@ body {
     border: 1px solid blue;
     display: flex;
     flex-direction: column;
-    // align-items: center;
+    position: relative;
+}
+
+header {
+    border: 1px solid #000;
+    height: 50px;
+    background: burlywood;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    #score-board {
+        background: #fff;
+    }
 }
 
 .pokemon-board {
@@ -137,14 +150,14 @@ body {
 .thrower-container {
     border: 1px solid #000;
     height: fit-content;
-    height: 140px;
-    width: 140px;
+    height: 160px;
+    width: 160px;
     position: relative;
     overflow: hidden;
     z-index: 6;
 
     &.hide {
-        animation: hide-thrower 6000ms ease;
+        animation: hide-thrower 6800ms ease;
     }
 
     img {
@@ -181,10 +194,13 @@ body {
     img {
         width: 100%;
         height: 100%;
-        animation: rotate infinite 0.4s;
+        animation: rotate infinite 0.8s linear;
     }
 }
 
-button {
-    padding: 1rem;
+#change-pokemon-btn {
+    width: 150px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
