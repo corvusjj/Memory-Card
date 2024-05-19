@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import LoadingPage from './LoadingPage';
-import Thrower, { ThrowerContainerRef } from './Thrower';
+import Header, { HeaderRef } from './Header';
 import PokemonBoard from './PokemonBoard';
-import ScoreBoard, { ScoreBoardRef } from './ScoreBoard';
+import Thrower, { ThrowerContainerRef } from './Thrower';
+import Footer from './Footer';
 import { RawData } from '../types/pokemon';
 
 interface RawDataProps {
     pokemonDataSet: RawData[];
     isLoading: boolean;
+    changePokemon: () => void;
 }
 
 interface GameDataProps {
@@ -16,14 +18,15 @@ interface GameDataProps {
     score: number;
 }
 
-export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
+export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataProps) {
     const [gameData, setGameData] = useState<GameDataProps>({
         pokemons: pokemonDataSet,
         hitIds: [],
         score: 0
     });
 
-    const scoreBoardRef = useRef<ScoreBoardRef>(null);
+    const gameScreenRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HeaderRef>(null);
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
     const pokeballRef = useRef<HTMLDivElement>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
@@ -43,8 +46,8 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
     }
 
     function updateScoreBoard(score:number) {
-        if (scoreBoardRef.current) {
-            scoreBoardRef.current.updateScore(score);
+        if (headerRef.current) {
+            headerRef.current.updateScore(score);
         }
     }
     
@@ -56,21 +59,28 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
 
     function animatePokeBall(cellCoordinates:number[]) {
         const [x, y] = cellCoordinates;
+        let cellToGameScreenDistanceX:number;
+        let cellToGameScreenDistanceY:number;
+
+        if (gameScreenRef.current) {
+            cellToGameScreenDistanceX = x - gameScreenRef.current.getBoundingClientRect().left + 20;
+            cellToGameScreenDistanceY = y - gameScreenRef.current.getBoundingClientRect().top + 20;
+        }
 
         setTimeout(() => {
             if (pokeballRef.current) {
                 pokeballRef.current.classList.add('throw');
-                pokeballRef.current.style.left = x + 'px';
-                pokeballRef.current.style.top = y + 'px';
+                pokeballRef.current.style.left = cellToGameScreenDistanceX  + 'px';
+                pokeballRef.current.style.top = cellToGameScreenDistanceY  + 'px';
             }
         }, 400);
         setTimeout(() => {
             if (pokeballRef.current) {
                 pokeballRef.current.classList.remove('throw');
-                pokeballRef.current.style.left = '30px';
-                pokeballRef.current.style.top = 'calc(100% - 120px)';
+                pokeballRef.current.style.left = '60px';
+                pokeballRef.current.style.top = 'calc(100% - 180px)';
             }
-        }, 1200);
+        }, 1100);
     }
 
     async function activateHit(id:number, cellCoordinates:number[]) {
@@ -99,24 +109,27 @@ export default function Game({pokemonDataSet, isLoading}:RawDataProps) {
     }
 
     return (
-        <div className="game">
+        <div ref={gameScreenRef} className="game">
             {isLoading? (
                 <LoadingPage/>
             ) : (
                 <>
-                    <ScoreBoard ref={scoreBoardRef} />
+                    <Header ref={headerRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
+                    <Footer/>
+
                     <div ref={pokeballRef} id='pokeball'>
-                        <img src="../../images/pokeball.png" alt="" />
+                        <img src="../../images/pokeball.webp" alt="" />
                     </div>
+                    <button id="change-pokemon-btn" onClick={changePokemon}>Change Pokemons</button>
                 </>
             )}            
         </div>
     );
 }
 
-//  bush audio
 //  audio toggling
-//  throw-ball animation
+//  sizes
+//  bush audio
 //  styling
