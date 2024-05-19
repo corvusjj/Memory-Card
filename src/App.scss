@@ -43,7 +43,7 @@ button {
 }
 
 header {
-    height: 50px;
+    height: 70px;
     width: 100%;
     background: #212629;
     display: flex;
@@ -55,27 +55,33 @@ header {
     #score-board {
         background: #cadfba;
         padding: 5px 10px;
+        font-size: 27px;
+        color: #000;
     }
 
     button {
         background: none;
         border: none;
+        cursor: pointer;
+    }
 
-        svg {
-            width: 30px;
-        }
+    #menu-btn {
+        width: 30px;
+    }
+
+    #help-btn {
+        width: 35px;
     }
 }
 
 .pokemon-board {
-    border: 1px solid red;
     align-self: flex-end;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: fit-content;
     column-gap: 10px;
     row-gap: 35px;
-    margin-top: 100px;
+    margin: 100px 20px 0 0;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 
@@ -173,17 +179,16 @@ header {
 @keyframes hide-thrower {
     0% {
         transform: translateX(0);
-    } 50% {
-        transform: translateX(-100%);
+    } 30% {
+        transform: translate(-100%, 10%);
     } 90% {
-        transform: translateX(-100%);
+        transform: translate(-100%, 0%);
     } 100% {
         transform: translateX(0);
     }
 }
 
 .thrower-container {
-    border: 1px solid #000;
     height: 175px;
     width: 175px;
     position: absolute;
@@ -241,11 +246,30 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    font-size: 18px;
+    z-index: 7;
 }
 
 #change-pokemon-btn {
-    width: 150px;
     position: absolute;
-    bottom: 0;
-    right: 0;
+    z-index: 9;
+    cursor: pointer;
+    bottom: 10px;
+    right: 20px;
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+@media screen and (min-width: 700px) {
+    .pokemon-board {
+        margin-top: 120px;
+    }
+
+    .pokemon-cell {
+        width: 75px;
+        height: 75px;
+    }
 }
