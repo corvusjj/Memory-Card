@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { RawData } from '../types/pokemon';
+import { playCryAudio, playHitAudio } from '../utils/audioManager'
 
 interface PokemonDataProps {
     pokemonData: RawData
@@ -7,7 +8,6 @@ interface PokemonDataProps {
 }
 
 export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
-    const audioRef = useRef<HTMLAudioElement>(null);
     const cellRef = useRef<HTMLDivElement>(null);
     const bushSpritesRef = useRef<HTMLDivElement>(null);
     const pokemonSpriteRef = useRef<HTMLImageElement>(null);
@@ -20,13 +20,6 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         setTimeout(() => {
             cellRef.current?.classList.remove('shake-active');
         }, 700);
-    }
-
-    function playCryAudio() {
-        if (audioRef.current) {
-            audioRef.current.volume = 0.5;
-            audioRef.current.play();
-        }
     }
 
     function animatePokemonHit() {
@@ -46,10 +39,12 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
         }
 
         runHit(pokemonData.id, [leftCellDistance, topCellDistance]);
-        await delay(1000);
+        await delay(700);
         
-        animatePokemonHit();    
-        playCryAudio();
+        playHitAudio();
+        await delay(300);
+        playCryAudio(pokemonData.id);
+        animatePokemonHit();
     }
 
     //  =============================================== ONCLICK / LONG-PRESS EVENTS =======================================================
@@ -58,7 +53,7 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
     const isLongPress = useRef(false);
 
     function handleLongPress() {
-        playCryAudio();
+        playCryAudio(pokemonData.id);
         shakeBush();
     }
 
@@ -137,7 +132,7 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
                 <img className='bush-sprite show' src="../../images/bush-3.webp" alt="" />
             </div>
             <img ref={pokemonSpriteRef} className='pokemon-sprite' src={pokemonData.sprite} alt="pokemon" />
-            <audio ref={audioRef} src={pokemonData.cryAudio}></audio>
+            <audio id={'audio-'+ pokemonData.id} src={pokemonData.cryAudio}></audio>
         </div>
     );
 }
