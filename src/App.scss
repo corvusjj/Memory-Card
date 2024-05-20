@@ -74,6 +74,19 @@ header {
     }
 }
 
+#loading-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        font-size: 19px;
+        margin-top: 20px;
+    }
+}
+
 .pokemon-board {
     align-self: flex-end;
     display: grid;
