@@ -4,6 +4,7 @@ import Header, { HeaderRef } from './Header';
 import PokemonBoard from './PokemonBoard';
 import Thrower, { ThrowerContainerRef } from './Thrower';
 import Footer, {FooterRef} from './Footer';
+import HelpModal, {HelpModalRef} from './HelpModal';
 import { RawData } from '../types/pokemon';
 
 interface RawDataProps {
@@ -30,6 +31,7 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
     const pokeballRef = useRef<HTMLDivElement>(null);
     const footerRef = useRef<FooterRef>(null);
+    const helpModalRef = useRef<HelpModalRef>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
@@ -40,7 +42,12 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
             score: 0
           });
         }
-      }, [pokemonDataSet]);
+    }, [pokemonDataSet]);
+
+    function handleChangePokemon() {
+        updateScoreBoard(0);
+        changePokemon();
+    }
 
     function shufflePokemons() {
         return [...gameData.pokemons.sort(() => Math.random() - 0.5)];
@@ -49,6 +56,12 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     function updateScoreBoard(score:number) {
         if (headerRef.current) {
             headerRef.current.updateScore(score);
+        }
+    }
+
+    function openHelpModal() {
+        if (helpModalRef.current) {
+            helpModalRef.current.showModal();
         }
     }
 
@@ -122,24 +135,29 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     return (
         <div ref={gameScreenRef} className="game">
             {isLoading? (
-                <LoadingPage/>
+                <>
+                    <Header ref={headerRef} openHelpModal={openHelpModal}/>
+                    <LoadingPage/>
+                    <HelpModal ref={helpModalRef}/>
+                </>
             ) : (
                 <>
-                    <Header ref={headerRef} />
+                    <Header ref={headerRef} openHelpModal={openHelpModal}/>
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
-                    <Footer ref={footerRef} changePokemon={changePokemon} />
+                    <Footer ref={footerRef} changePokemon={handleChangePokemon} />
+                    <HelpModal ref={helpModalRef}/>
 
                     <div ref={pokeballRef} id='pokeball'>
                         <img src="../../images/pokeball.webp" alt="" />
                     </div>
                 </>
-            )}            
+            )}     
         </div>
     );
 }
 
+//  modal
+//  menu
 //  audio toggling
-//  sizes
 //  bush audio
-//  styling

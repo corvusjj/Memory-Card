@@ -273,6 +273,35 @@ footer {
     }
 }
 
+@keyframes grow {
+    from {
+        transform: scale(0.5) translate(-50%, -50%);
+    } to {
+        transform: scale(1) translate(-50%, -50%);
+    }
+}
+
+#help-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    min-width: 300px;
+    animation: grow 0.3s ease-in-out;
+
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    p:first-child {
+        margin-bottom: 10px;
+    }
+}
+
 @media screen and (min-width: 700px) {
     .pokemon-board {
         margin-top: 120px;
