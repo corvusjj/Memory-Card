@@ -87,15 +87,15 @@ header {
     }
 
     .sidebar-container {
-        width: 260px;
+        width: 280px;
         height: 100%;
         background: #ebebeb;
         cursor: auto;
         padding: 30px 15px;
         font-size: 18px;
+        position: relative;
 
         section.audio {
-            // border: 1px solid #000;
             display: grid;
             grid-template-columns: auto 1fr;
             align-items: center;
@@ -116,6 +116,31 @@ header {
                     height: 25px;
                 }
             }
+        }
+
+        section.sources {
+            margin-top: 50px;
+
+            h3 {
+                font-size: 19px;
+                font-weight: lighter;
+            }
+
+            li {
+                list-style-type: none;
+                margin-top: 10px;
+            }
+            
+        }
+
+        #github {
+            width: 30px;
+            height: 30px;
+            display: block;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
 }
