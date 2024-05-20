@@ -1,5 +1,9 @@
 import { useState, useImperativeHandle, forwardRef } from "react";
 
+interface FooterProps {
+    changePokemon: () => void;
+}
+
 interface hitPokemonStatus {
     name: string;
     hitTwice: boolean;
@@ -9,7 +13,7 @@ export interface FooterRef {
     handleHitStatus: (name:string, hitTwice:boolean) => void;
 }
 
-const Footer = forwardRef((_props, ref) => {
+const Footer = forwardRef(({changePokemon}:FooterProps, ref) => {
     const [hitPokemonStatus, setHitPokemonStatus] = useState<hitPokemonStatus>({name:'', hitTwice: false});
 
     useImperativeHandle(ref, () => {
@@ -20,7 +24,11 @@ const Footer = forwardRef((_props, ref) => {
         }
     });
 
-    if (hitPokemonStatus.name === '') return <footer></footer>
+    if (hitPokemonStatus.name === '') return (
+        <footer>
+            <button id="change-pokemon-btn" onClick={changePokemon}>Change Pokemons</button>
+        </footer>
+    )
 
     return (
         <footer>
@@ -29,6 +37,7 @@ const Footer = forwardRef((_props, ref) => {
             ) : (
                 <span>You hit {hitPokemonStatus.name}!</span>
             )}
+            <button id="change-pokemon-btn" onClick={changePokemon}>Change Pokemons</button>
         </footer>
     );
 });

@@ -128,12 +128,11 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
                     <Header ref={headerRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
-                    <Footer ref={footerRef}/>
+                    <Footer ref={footerRef} changePokemon={changePokemon} />
 
                     <div ref={pokeballRef} id='pokeball'>
                         <img src="../../images/pokeball.webp" alt="" />
                     </div>
-                    <button id="change-pokemon-btn" onClick={changePokemon}>Change Pokemons</button>
                 </>
             )}            
         </div>

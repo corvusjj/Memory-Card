@@ -248,19 +248,16 @@ footer {
     width: 100%;
     display: flex;
     align-items: center;
-    padding-left: 50px;
+    padding: 0 20px;
     font-size: 18px;
     z-index: 7;
-}
 
-#change-pokemon-btn {
-    position: absolute;
-    z-index: 9;
-    cursor: pointer;
-    bottom: 10px;
-    right: 20px;
-    padding: 5px 10px;
-    font-size: 16px;
+    #change-pokemon-btn {
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 16px;
+        margin-left: auto;
+    }
 }
 
 @media screen and (min-width: 700px) {
