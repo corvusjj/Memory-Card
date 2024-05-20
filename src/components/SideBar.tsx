@@ -1,4 +1,5 @@
 import { useImperativeHandle, forwardRef, useRef, useState } from "react";
+import { changeMusicState, changeSfxState } from "../utils/audioManager";
 
 export interface SideBarRef {
     openSideBar: () => void;
@@ -6,8 +7,9 @@ export interface SideBarRef {
 
 function MusicBtn() {
     const [musicIsOn, setMusicIsOn] = useState(true);
-    
+
     function toggleMusic() {
+        changeMusicState(!musicIsOn);
         setMusicIsOn(!musicIsOn);
     }
 
@@ -30,6 +32,7 @@ function SfxBtn() {
     const [sfxIsOn, setSfxIsOn] = useState(true);
 
     function toggleSfx() {
+        changeSfxState(!sfxIsOn);
         setSfxIsOn(!sfxIsOn);
     }
 

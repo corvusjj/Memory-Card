@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid';
 
+import { playBackgroundMusic } from './utils/audioManager';
 import { PokemonData, RawData } from './types/pokemon';
 import Game from './components/Game';
-import BushRenderTest from './components/BushRenderTest';
 
 async function fetchPokemonData(link:string) {
     try {
@@ -136,6 +136,7 @@ function App() {
                     const rawDataSet = await getRawDataSet(dataSet);
                     setIsLoading(false);
                     setPokemonData(rawDataSet);
+                    playBackgroundMusic();
                 } catch(error) {
                     console.log(error);
                     setIsLoading(false);
@@ -152,14 +153,11 @@ function App() {
 
     return (
         <>
-            <button onClick={changePokemonSet}>Change Pokemons</button>
-            <Game pokemonDataSet={pokemonDataSet} isLoading={isLoading}/>
-            <BushRenderTest/>
+            <Game pokemonDataSet={pokemonDataSet} isLoading={isLoading} changePokemon={changePokemonSet}/>
         </>
     )
 }
 
 export default App
 
-//  lifting child component functions up
 //  remove logs
