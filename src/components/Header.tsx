@@ -2,13 +2,14 @@ import { useState, useImperativeHandle, forwardRef, useRef, SetStateAction } fro
 
 interface HeaderProps {
     openHelpModal: () => void;
+    openSideBar: () => void;
 }
 
 export interface HeaderRef {
     updateScore: (score:number) => void;
 }
 
-const Header = forwardRef(({openHelpModal}:HeaderProps, ref) => {
+const Header = forwardRef(({openHelpModal, openSideBar}:HeaderProps, ref) => {
     const [score, setScore] = useState(0);
     const scoreBoardRef = useRef<HTMLDivElement>(null);
 
@@ -16,13 +17,13 @@ const Header = forwardRef(({openHelpModal}:HeaderProps, ref) => {
         return {
             updateScore(score: SetStateAction<number>) {
                 setScore(score);
-            }
+            },
         }
     });
 
     return (
         <header>
-            <button id="menu-btn">
+            <button id="menu-btn" onClick={openSideBar}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">             
                     <path d="M4 6h16M4 12h16M4 18h16" stroke="#ebebeb" strokeWidth={1.32} strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

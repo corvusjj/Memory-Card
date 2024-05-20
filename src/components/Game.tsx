@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import LoadingPage from './LoadingPage';
 import Header, { HeaderRef } from './Header';
+import SideBar, { SideBarRef } from './SideBar';
+import LoadingPage from './LoadingPage';
 import PokemonBoard from './PokemonBoard';
 import Thrower, { ThrowerContainerRef } from './Thrower';
 import Footer, {FooterRef} from './Footer';
@@ -28,6 +29,7 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
 
     const gameScreenRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HeaderRef>(null);
+    const sidebarRef = useRef<SideBarRef>(null);
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
     const pokeballRef = useRef<HTMLDivElement>(null);
     const footerRef = useRef<FooterRef>(null);
@@ -56,6 +58,12 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     function updateScoreBoard(score:number) {
         if (headerRef.current) {
             headerRef.current.updateScore(score);
+        }
+    }
+
+    function openSideBar() {
+        if (sidebarRef.current) {
+            sidebarRef.current.openSideBar();
         }
     }
 
@@ -136,13 +144,15 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
         <div ref={gameScreenRef} className="game">
             {isLoading? (
                 <>
-                    <Header ref={headerRef} openHelpModal={openHelpModal}/>
+                    <Header ref={headerRef} openSideBar={openSideBar} openHelpModal={openHelpModal}/>
+                    <SideBar ref={sidebarRef}/>
                     <LoadingPage/>
                     <HelpModal ref={helpModalRef}/>
                 </>
             ) : (
                 <>
-                    <Header ref={headerRef} openHelpModal={openHelpModal}/>
+                    <Header ref={headerRef} openSideBar={openSideBar} openHelpModal={openHelpModal}/>
+                    <SideBar ref={sidebarRef}/>
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
                     <Footer ref={footerRef} changePokemon={handleChangePokemon} />
