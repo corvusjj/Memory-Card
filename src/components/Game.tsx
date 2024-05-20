@@ -3,7 +3,7 @@ import LoadingPage from './LoadingPage';
 import Header, { HeaderRef } from './Header';
 import PokemonBoard from './PokemonBoard';
 import Thrower, { ThrowerContainerRef } from './Thrower';
-import Footer from './Footer';
+import Footer, {FooterRef} from './Footer';
 import { RawData } from '../types/pokemon';
 
 interface RawDataProps {
@@ -29,6 +29,7 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     const headerRef = useRef<HeaderRef>(null);
     const throwerContainerRef = useRef<ThrowerContainerRef>(null);
     const pokeballRef = useRef<HTMLDivElement>(null);
+    const footerRef = useRef<FooterRef>(null);
     const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
     useEffect(() => {
@@ -48,6 +49,12 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     function updateScoreBoard(score:number) {
         if (headerRef.current) {
             headerRef.current.updateScore(score);
+        }
+    }
+
+    function updateFooterHitStatus(name:string, hitTwice:boolean) {
+        if (footerRef.current) {
+            footerRef.current.handleHitStatus(name, hitTwice);
         }
     }
     
@@ -83,15 +90,16 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
         }, 1100);
     }
 
-    async function activateHit(id:number, cellCoordinates:number[]) {
+    async function activateHit(name:string, id:number, cellCoordinates:number[]) {
         animateThrower();
         animatePokeBall(cellCoordinates);
 
         const shuffledPokemonSet = shufflePokemons();
+        const hitTwice = gameData.hitIds.includes(id);
         let newHitIds:number[];
         let newScore:number;
 
-        if (gameData.hitIds.includes(id)) {
+        if (hitTwice) {
             newHitIds = [];
             newScore = 0;
         } else {
@@ -99,11 +107,14 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
             newScore = gameData.score + 1;
         }
 
-        await delay(3000);
-
+        await delay(1000);
+        
         updateScoreBoard(newScore);
+        updateFooterHitStatus(name, hitTwice);
         if (newScore === 16) return console.log('you hit them all!');
 
+        await delay(2000);
+    
         //  rerender board with shuffled pokemons
         setGameData({score: newScore, pokemons: shuffledPokemonSet, hitIds: newHitIds});
     }
@@ -117,7 +128,7 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
                     <Header ref={headerRef} />
                     <PokemonBoard pokemonRawData={gameData.pokemons} runHit={activateHit}/>
                     <Thrower ref={throwerContainerRef}/>
-                    <Footer/>
+                    <Footer ref={footerRef}/>
 
                     <div ref={pokeballRef} id='pokeball'>
                         <img src="../../images/pokeball.webp" alt="" />

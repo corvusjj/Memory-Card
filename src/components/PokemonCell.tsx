@@ -4,7 +4,7 @@ import { playCryAudio, playHitAudio } from '../utils/audioManager'
 
 interface PokemonDataProps {
     pokemonData: RawData
-    runHit: (id:number, coordinates:number[]) => void;
+    runHit: (name:string, id:number, coordinates:number[]) => void;
 }
 
 export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
@@ -38,7 +38,7 @@ export default function PokemonCell({pokemonData, runHit}: PokemonDataProps) {
             topCellDistance = cellRef.current.getBoundingClientRect().y;
         }
 
-        runHit(pokemonData.id, [leftCellDistance, topCellDistance]);
+        runHit(pokemonData.name, pokemonData.id, [leftCellDistance, topCellDistance]);
         await delay(700);
         
         playHitAudio();
