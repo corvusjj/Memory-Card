@@ -141,7 +141,7 @@ export default function Game({pokemonDataSet, isLoading, changePokemon}:RawDataP
     }
 
     return (
-        <div ref={gameScreenRef} className="game">
+        <div ref={gameScreenRef} className="game" onContextMenu={(e) => e.preventDefault()}>
             {isLoading? (
                 <>
                     <Header ref={headerRef} openSideBar={openSideBar} openHelpModal={openHelpModal}/>
